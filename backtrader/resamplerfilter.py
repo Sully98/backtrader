@@ -359,7 +359,7 @@ class _BaseResampler(with_metaclass(metabase.MetaParams, object)):
 
         return False, True  # subweeks, not subdays and not sessionend
 
-    def _calcadjtime(self, greater=False):
+    def _calcadjtime(self, greater=self.p.rightedge):
         if self._nexteos is None:
             # Session has been exceeded - end of session is the mark
             return self._lastdteos  # utc-like
@@ -537,10 +537,10 @@ class Resampler(_BaseResampler):
                 if tframe == TimeFrame.Ticks:  # Ticks is already the lowest
                     dodeliver = True
                 elif tframe == TimeFrame.Minutes:
-                    dtnum = self._calcadjtime(greater=True)
+                    dtnum = self._calcadjtime(greater=self.p.rightedge)
                     dodeliver = dtnum <= forcedata.datetime[0]
                 elif tframe == TimeFrame.Days:
-                    dtnum = self._calcadjtime(greater=True)
+                    dtnum = self._calcadjtime(greater=self.p.rightedge)
                     dodeliver = dtnum <= forcedata.datetime[0]
             else:
                 dodeliver = True
