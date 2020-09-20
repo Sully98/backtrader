@@ -415,7 +415,7 @@ class _BaseResampler(with_metaclass(metabase.MetaParams, object)):
         dtnum = self.data.date2num(dt)
         return dtnum
 
-    def _adjusttime(self, greater=False, forcedata=None):
+    def _adjusttime(self, greater=self.p.rightedge, forcedata=None):
         '''
         Adjusts the time of calculated bar (from underlying data source) by
         using the timeframe to the appropriate boundary, with compression taken
@@ -547,7 +547,7 @@ class Resampler(_BaseResampler):
 
             if dodeliver:
                 if not onedge and self.doadjusttime:
-                    self._adjusttime(greater=True, forcedata=forcedata)
+                    self._adjusttime(greater=self.p.rightedge, forcedata=forcedata)
 
                 data._add2stack(self.bar.lvalues())
                 self.bar.bstart(maxdate=True)  # bar delivered -> restart
